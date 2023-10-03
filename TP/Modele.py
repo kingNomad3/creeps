@@ -1,4 +1,4 @@
-from TP.Chemin import *
+from Chemin import *
 
 
 class Modele():

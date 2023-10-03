@@ -13,7 +13,7 @@ class Chemin ():
 
         self.chemin = self.creer_segments()
 
-    def creer_segements(self):
+    def creer_segments(self):
         segment = []
         debut = self.pivots[0]
 
