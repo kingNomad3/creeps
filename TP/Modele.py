@@ -21,8 +21,9 @@ class Modele():
         self.tours.append(tour)
 
     def travailler(self):
-        if len(self.creeps) < 19 and self.parent.temps % 700 == 0:
+        if len(self.creeps) < 19 and self.parent.temps % 500 == 0:
             self.creer_creeps()
         for i in self.creeps:
             i.mouvement_creep()
-
+            if not i.is_alive:
+                self.creeps.remove(i)

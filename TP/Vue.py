@@ -14,6 +14,7 @@ class Vue:
         self.afficher_chemin()
         self.afficher_creep()
         self.creer_chateau()
+        self.creer_menu_vague_chrono()
 
 
     def afficher_chemin(self):
@@ -29,8 +30,10 @@ class Vue:
         self.afficher_creep()
 
     def creer_chateau(self):
-        self.frame_jeu.create_rectangle(1120, 520, 1240, 680, fill="snow3")
-        self.frame_jeu.create_rectangle(1100, 680, 1260, 700, fill="snow4")
-        self.frame_jeu.create_rectangle(1090, 560, 1270, 600, fill="snow4")
+        self.frame_jeu.create_rectangle(1120, 520, 1240, 680, fill="snow3", outline="snow3")
+        self.frame_jeu.create_rectangle(1100, 680, 1260, 700, fill="snow4", outline="snow4")
+        self.frame_jeu.create_rectangle(1090, 560, 1270, 600, fill="snow4", outline="snow4")
 
-    # def creer_menu
+    def creer_menu_vague_chrono(self):
+        self.frame_jeu.create_rectangle(40, 760, 200, 920, fill="blue")
+        self.frame_jeu.create_line(40, 840, 200, 840, fill="white")
