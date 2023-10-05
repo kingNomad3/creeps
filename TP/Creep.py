@@ -9,12 +9,12 @@ class Creep:
     def __init__(self, parent):
         self.parent = parent
         self.pivot = 1
-        self.vitesse = 20
+        self.vitesse = 15
         self.vie = 20
         self.id = prochain_id()
         self.couleur = "red"
         self.dimensions = {
-            "x1": 160,
+            "x1": 164,
             "y1": 0,
             "x2": 240,
             "y2": 80
@@ -29,18 +29,18 @@ class Creep:
         pivot_actuel = self.parent.chemin.pivots[self.pivot]
         monter = 1
         a_droite = 1
-        if self.dimensions["x1"] == pivot_actuel[0] and self.dimensions["y2"] == pivot_actuel[1] + 40:
+        if pivot_actuel[0] + 5 >= self.dimensions["x1"] >= pivot_actuel[0] - 5 and self.dimensions["y2"] == pivot_actuel[1] + 40:
             self.pivot = self.pivot + 1
         pivot_actuel = self.parent.chemin.pivots[self.pivot]
 
-        if self.dimensions["x1"] == pivot_actuel[0]:
+        if pivot_actuel[0] + 5 >= self.dimensions["x1"] >= pivot_actuel[0] - 5:
             if self.dimensions["y2"] - pivot_actuel[1] - 40 > 0:
                 monter = monter * -1
             self.dimensions["y1"] = self.dimensions["y1"] + self.vitesse * monter
             self.dimensions["y2"] = self.dimensions["y2"] + self.vitesse * monter
 
-        elif self.dimensions["y2"] == pivot_actuel[1] + 40:
-            if self.dimensions["x1"] - pivot_actuel[0] > 0:
+        elif pivot_actuel[1] + 40 >= self.dimensions["y2"] >= pivot_actuel[1] - 40:
+            if self.dimensions["x1"] - pivot_actuel[0] > 5:
                 a_droite = a_droite * -1
             self.dimensions["x1"] = self.dimensions["x1"] + self.vitesse * a_droite
             self.dimensions["x2"] = self.dimensions["x2"] + self.vitesse * a_droite

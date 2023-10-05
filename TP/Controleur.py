@@ -14,5 +14,14 @@ class Controleur:
         self.vue.afficher_modele()
         self.vue.root.after(50, self.boucler_travail)
         self.temps += 50
+        if self.modele.tour_a_creer != -1 and self.modele.x and self.modele.y:
+            print("wkewoke")
+            self.modele.creer_tour()
+            self.vue.afficher_tours()
+        self.nouvelle_partie()
 
-
+    def nouvelle_partie(self):
+        if len(self.modele.creeps) == 0:
+            pass
+        if self.temps % 30000 == 0:
+            self.modele.compteur = 0
