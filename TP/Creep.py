@@ -9,8 +9,8 @@ class Creep:
     def __init__(self, parent):
         self.parent = parent
         self.pivot = 1
+        self.vitesse = 20
         self.vie = 20
-        self.vitesse = 5
         self.id = prochain_id()
         self.couleur = "red"
         self.dimensions = {
@@ -29,24 +29,27 @@ class Creep:
         pivot_actuel = self.parent.chemin.pivots[self.pivot]
         monter = 1
         a_droite = 1
-        if self.dimensions["x1"] == pivot_actuel[0] and self.dimensions["y2"] == pivot_actuel[1]:
+        if self.dimensions["x1"] == pivot_actuel[0] and self.dimensions["y2"] == pivot_actuel[1] + 40:
             self.pivot = self.pivot + 1
         pivot_actuel = self.parent.chemin.pivots[self.pivot]
 
         if self.dimensions["x1"] == pivot_actuel[0]:
-            if self.dimensions["y2"] - pivot_actuel[1] > 0:
+            if self.dimensions["y2"] - pivot_actuel[1] - 40 > 0:
                 monter = monter * -1
-            self.dimensions["y1"] = self.dimensions["y1"] + 10 * monter
-            self.dimensions["y2"] = self.dimensions["y2"] + 10 * monter
+            self.dimensions["y1"] = self.dimensions["y1"] + self.vitesse * monter
+            self.dimensions["y2"] = self.dimensions["y2"] + self.vitesse * monter
 
-        elif self.dimensions["y2"] == pivot_actuel[1]:
+        elif self.dimensions["y2"] == pivot_actuel[1] + 40:
             if self.dimensions["x1"] - pivot_actuel[0] > 0:
                 a_droite = a_droite * -1
-            self.dimensions["x1"] = self.dimensions["x1"] + 10 * a_droite
-            self.dimensions["x2"] = self.dimensions["x2"] + 10 * a_droite
+            self.dimensions["x1"] = self.dimensions["x1"] + self.vitesse * a_droite
+            self.dimensions["x2"] = self.dimensions["x2"] + self.vitesse * a_droite
 
-        if self.dimensions["x1"] == 1120 and self.dimensions["y2"] == 640:
+        if self.dimensions["x2"] >= 1180 and self.dimensions["y2"] >= 600:
             self.is_alive = False
             self.a_tue = True
 
+    def am_i_alive(self):
+        if self.vie <= 0:
+            self.is_alive = False
 

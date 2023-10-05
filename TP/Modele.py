@@ -10,6 +10,8 @@ class Modele():
         self.chemin = Chemin()
         self.tours = []
         self.creer_creeps()
+        self.temps = self.parent.temps
+        self.compteur = 0
 
 
     def creer_creeps(self):
@@ -21,8 +23,9 @@ class Modele():
         self.tours.append(tour)
 
     def travailler(self):
-        if len(self.creeps) < 19 and self.parent.temps % 900 == 0:
+        if len(self.creeps) < 19 and self.parent.temps % 700 == 0 and self.compteur < 20:
             self.creer_creeps()
+            self.compteur += 1
         for i in self.creeps:
             i.mouvement_creep()
             if not i.is_alive:

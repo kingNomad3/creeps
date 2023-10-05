@@ -3,9 +3,9 @@ from Modele import *
 
 class Controleur:
     def __init__(self):
+        self.temps = 0
         self.modele = Modele(self)
         self.vue = Vue(self, self.modele)
-        self.temps = 0
         self.vue.root.after(500, self.boucler_travail)
         self.vue.root.mainloop()
 
@@ -14,3 +14,5 @@ class Controleur:
         self.vue.afficher_modele()
         self.vue.root.after(50, self.boucler_travail)
         self.temps += 50
+
+
