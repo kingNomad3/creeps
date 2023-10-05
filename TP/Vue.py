@@ -18,6 +18,7 @@ class Vue:
         self.creer_menu_choix_tours()
         self.creer_menu_nb_vies()
         self.creer_menu_argent()
+        self.tour_a_creer = -1
 
 
     def afficher_chemin(self):
