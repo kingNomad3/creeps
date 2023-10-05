@@ -4,10 +4,13 @@ from Modele import *
 class Controleur:
     def __init__(self):
         self.temps = 0
+        self.vague = 1
+        self.vies = 20
         self.modele = Modele(self)
         self.vue = Vue(self, self.modele)
         self.vue.root.after(500, self.boucler_travail)
         self.vue.root.mainloop()
+
 
     def boucler_travail(self):
         self.modele.travailler()
@@ -25,3 +28,5 @@ class Controleur:
             pass
         if self.temps % 30000 == 0:
             self.modele.compteur = 0
+            self.modele.temps = 0
+            self.vague += 1

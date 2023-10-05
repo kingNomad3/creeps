@@ -21,6 +21,7 @@ class Modele():
     def creer_creeps(self):
         creep = Creep(self)
         self.creeps.append(creep)
+        print(len(self.creeps))
 
     def creer_tour(self):
         tour = None

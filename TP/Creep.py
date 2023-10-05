@@ -22,9 +22,6 @@ class Creep:
         self.is_alive = True
         self.a_tue = False
 
-
-
-
     def mouvement_creep(self):
         pivot_actuel = self.parent.chemin.pivots[self.pivot]
         monter = 1
