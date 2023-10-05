@@ -33,7 +33,7 @@ class Modele():
                 tour = Tour_poison(self, self.x, self.y)
         if tour:
             self.tours.append(tour)
-            self.parent.vue.tour_a_creer == -1
+            self.tour_a_creer = -1
             self.x = None
             self.y = None
 
