@@ -10,20 +10,21 @@ class Vue:
         self.parent = parent
         self.modele = modele
         self.root = Tk()
-        self.obus = []
         self.init_fenetre()
+        self.obus = []
 
     def init_fenetre(self):
         self.frame_jeu = Canvas(self.root, height=960, width=1280, bg="black")
         self.frame_jeu.pack()
         self.terrain = self.frame_jeu.create_rectangle(0,0,1282,720, fill='forest green', tags="terrain_jeu") # Pixel de trop
         self.frame_jeu.tag_bind("terrain_jeu", "<Button-1>", self.coordonees_tour)
+        self.frame_jeu.create_rectangle(0, 720, 1282, 740, fill='black')
 
         self.afficher_chemin()
         self.afficher_creep()
         self.creer_chateau()
         self.creer_menu_vague_chrono()
-        self.creer_menu_choix_tours()
+        self.creer_menu_choix_tours("random")
         # self.creer_menu_upgrade_tour()
         self.creer_menu_nb_vies()
         self.creer_menu_argent()
@@ -35,7 +36,7 @@ class Vue:
 
     def afficher_creep(self):
         for i in self.modele.creeps:
-            i.id_tkinter = self.frame_jeu.create_oval(i.dimensions["x1"], i.dimensions["y1"],i.dimensions["x2"], i.dimensions["y2"],
+            self.frame_jeu.create_oval(i.dimensions["x1"], i.dimensions["y1"],i.dimensions["x2"], i.dimensions["y2"],
                                        fill="OrangeRed3", tags=("creeps",))
 
             self.frame_jeu.create_oval(i.dimensions["x1"] + 16 , i.dimensions["y1"]+16 ,i.dimensions["x2"] - 44,
@@ -57,11 +58,11 @@ class Vue:
 
 
     def afficher_modele(self):
-        self.frame_jeu.delete("creeps", "temps","vagueActuelle", "viesActuelle")
+        self.frame_jeu.delete("creeps", "temps","vagueActuelle", "vieActuelle")
         self.afficher_creep()
         self.frame_jeu.create_text(120, 800, text=round(self.parent.temps/1000,0), fill="black", font=('Helvetica 20 bold'), tags="temps")
         self.frame_jeu.create_text(120, 882, text=self.parent.vague, fill="black", font=('Helvetica 20 bold'), tag="vagueActuelle")
-        self.frame_jeu.create_text(1060, 800, text=self.parent.vies, fill="black", font=('Helvetica 30 bold'),  tag="viesActuelle")
+        self.frame_jeu.create_text(1060, 800, text=self.parent.vies, fill="black", font=('Helvetica 30 bold'),  tag="vieActuelle")
 
 
     def creer_chateau(self):
@@ -92,42 +93,39 @@ class Vue:
         self.frame_jeu.create_text(120, 852, text="Vague", fill="black", font=('Helvetica 15 bold'))
 
 
-    def creer_menu_choix_tours(self):
-        self.frame_jeu.create_rectangle(240, 760, 720, 920, fill="Yellow green", outline="white")
-        self.frame_jeu.create_text(350, 780, text="Choix de tours", fill="black", font=('Helvetica 15 bold'))
+    def creer_menu_choix_tours(self, evt):
+        self.frame_jeu.create_rectangle(240, 760, 720, 920, fill="Yellow green", outline="white",  tags=("menu_tour",))
+        self.frame_jeu.create_text(350, 780, text="Choix de tours", fill="black", font=('Helvetica 15 bold'), tags=("menu_tour" ,))
 
-        self.frame_button1 = self.frame_jeu.create_rectangle(280, 800, 380, 880, fill="OliveDrab2", outline="white", tags="button1")
+        self.frame_button1 = self.frame_jeu.create_oval(315, 800, 345, 830, fill="OliveDrab2", outline="white", tags=("button1", "menu_tour",))
         self.frame_jeu.tag_bind("button1", "<Button-1>", self.creer_tour_laser)
-        self.frame_jeu.create_text(330, 850, text="  TOUR \n LASER", fill="black", tags="texte_button1", font=('Helvetica 13 bold'))
+        self.frame_jeu.create_text(330, 850, text="  TOUR \n LASER", fill="black", tags=("texte_button1", "menu_tour",), font=('Helvetica 13 bold'))
 
-        self.frame_button2 = self.frame_jeu.create_rectangle(430, 800, 530, 880, fill="OliveDrab2", outline="white", tags="button2")
+        self.frame_button2 = self.frame_jeu.create_oval(465, 800, 495, 830, fill="OliveDrab2", outline="white", tags=("button2", "menu_tour",))
         self.frame_jeu.tag_bind("button2", "<Button-1>", self.creer_tour_projectile)
-        self.frame_jeu.create_text(479, 850, text="     TOUR \nPROJECTILE", fill="black", tags="texte_button2", font=('Helvetica 13 bold'))
+        self.frame_jeu.create_text(479, 850, text="     TOUR \nPROJECTILE", fill="black", tags=("texte_button2", "menu_tour",), font=('Helvetica 13 bold'))
 
-        self.frame_button3 = self.frame_jeu.create_rectangle(580, 800, 680, 880, fill="OliveDrab2", outline="white", tags="button3")
+        self.frame_button3 = self.frame_jeu.create_oval(615, 800, 645, 830, fill="OliveDrab2", outline="white", tags=("button3", "menu_tour",))
         self.frame_jeu.tag_bind("button3", "<Button-1>", self.creer_tour_poison)
-        self.frame_jeu.create_text(630, 850, text="  TOUR \n POISON", fill="black", tags="texte_button3", font=('Helvetica 13 bold'))
+        self.frame_jeu.create_text(630, 850, text="  TOUR \n POISON", fill="black", tags=("texte_button3", "menu_tour",), font=('Helvetica 13 bold'))
 
 
-    def creer_menu_upgrade_tour(self):
-        self.frame_jeu.create_rectangle(240, 760, 720, 920, fill="turquoise3", outline="white")
-        self.frame_jeu.create_text(350, 780, text="Choix de tours", fill="black", font=('Helvetica 15 bold'))
+    def creer_menu_upgrade_tour(self, evt):
+        self.frame_jeu.create_rectangle(240, 760, 720, 920, fill="turquoise3", outline="white", tags=("menu_upgrade",))
+        self.frame_jeu.create_text(350, 780, text="Upgrade tour", fill="black", font=('Helvetica 15 bold'), tags=("menu_upgrade",))
 
         self.frame_button1 = self.frame_jeu.create_rectangle(280, 800, 400, 880, fill="turquoise2", outline="white",
-                                                             tags="button1")
-        self.frame_jeu.tag_bind("button1", "<Button-1>", self.creer_tour)
-        self.frame_jeu.create_text(320, 850, text="", fill="black", tags="")
+                                                             tags=("button1", "menu_upgrade",))
+        self.frame_jeu.create_text(320, 850, text="", fill="black", tags=("menu_upgrade",))
 
-        self.frame_button2 = self.frame_jeu.create_rectangle(440, 800, 520, 880, fill="turquoise2", outline="white",
-                                                             tags="button2")
-        self.frame_jeu.tag_bind("button2", "<Button-1>", self.creer_tour)
-        self.frame_jeu.create_text(460, 850, text="", fill="black", tags="")
+        self.frame_button_upgrade = self.frame_jeu.create_rectangle(440, 800, 520, 880, fill="turquoise2", outline="white",
+                                                             tags=("button_upgrade", "menu_upgrade",))
+        self.frame_jeu.tag_bind("button_upgrade", "<Button-1>", self.creer_menu_choix_tours)
+        self.frame_jeu.create_text(460, 850, text="", fill="black", tags=("menu_upgrade",))
 
         self.frame_button3 = self.frame_jeu.create_rectangle(560, 800, 680, 880, fill="turquoise2", outline="white",
-                                                             tags="button2")
-        self.frame_jeu.tag_bind("button2", "<Button-1>", self.creer_tour)
-        self.frame_jeu.create_text(460, 850, text="", fill="black", tags="")
-        pass
+                                                             tags=("button3", "menu_upgrade",))
+        self.frame_jeu.create_text(460, 850, text="", fill="black", tags=("menu_upgrade",))
 
 
     def creer_tour(self):
@@ -135,7 +133,7 @@ class Vue:
 
     def creer_menu_nb_vies(self):
         self.frame_jeu.create_rectangle(960, 760, 1160, 840, fill="Yellow green", outline="white")
-        self.frame_jeu.create_text(1060, 770, text="Vies", fill="black", font=('Helvetica 15 bold'))
+        self.frame_jeu.create_text(1060, 770, text="Vies", fill="black", font=('Helvetica 15 bold'), tags=("vie",))
 
     def creer_menu_argent(self):
         self.frame_jeu.create_rectangle(960, 880, 1160, 920, fill="Yellow green", outline="white")
@@ -153,17 +151,20 @@ class Vue:
                 self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="pink", tags=("tours",))
 
             if isinstance(i, Tour_poison):
-                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="green yellow",
-                                              tags=("tours",))
+                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="green yellow", tags=("tours",))
 
-            self.frame_jeu.create_oval(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="yellow", tags=("creep",),
-                                     stipple='gray50')
-        #self.frame_jeu.tag_bind("tours", "<Button-1>", self.afficher_fenetre_upgrade)
+            self.frame_jeu.create_oval(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="yellow", stipple='gray50',  tags=("tours",))
+
+            self.frame_jeu.tag_bind("tours", "<Button-1>", self.creer_menu_upgrade_tour)
 
     def coordonees_tour(self, evt):
-        if self.modele.tour_a_creer != -1:
-            self.modele.x = evt.x
-            self.modele.y = evt.y
+        print(self.frame_jeu.find_overlapping(evt.x - 30, evt.y - 30, evt.x + 30, evt.y + 30))
+        if len(self.frame_jeu.find_overlapping(evt.x - 30, evt.y - 30, evt.x + 30, evt.y + 30)) <= 1:
+            if self.modele.tour_a_creer != -1:
+                self.modele.x = evt.x
+                self.modele.y = evt.y
+
+
 
     def creer_tour_laser(self, evt):
         self.modele.tour_a_creer = 0
@@ -185,13 +186,10 @@ class Vue:
                                                     i.obus.y + 8,
                                                     fill="grey",
                                                     tags=(i.obus.id, "obus"))
-                    i.obus.id_tkinter = obus
                     self.obus.append(obus)
                 else:
                     self.frame_jeu.delete(i.obus.id)
                     self.obus.remove(i)
-
-
 
     def effacer_obus(self, obus):
         self.frame_jeu.delete(obus.id)
@@ -199,4 +197,5 @@ class Vue:
     def afficher_fenetre_upgrade(self):
         self.frame_jeu
         self.tour_upgrade()
+
 

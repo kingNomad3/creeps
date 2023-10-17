@@ -6,6 +6,7 @@ class Controleur:
         self.temps = 0
         self.vague = 1
         self.vies = 20
+        self.argent = 100
         self.modele = Modele(self)
         self.vue = Vue(self, self.modele)
         self.vue.root.after(500, self.boucler_travail)
@@ -35,5 +36,5 @@ class Controleur:
             pass
         if self.temps % 30000 == 0:
             self.modele.compteur = 0
-            self.modele.temps = 0
+            self.temps = 0
             self.vague += 1

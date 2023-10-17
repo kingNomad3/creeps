@@ -11,7 +11,6 @@ class Modele():
         self.creeps = []
         self.chemin = Chemin()
         self.tours = []
-        self.creer_creeps()
         self.temps = self.parent.temps
         self.compteur = 0
         self.x = None
@@ -46,3 +45,5 @@ class Modele():
             i.am_i_alive()
             if not i.is_alive:
                 self.creeps.remove(i)
+                if i.a_tue:
+                    self.parent.vies -= 1
