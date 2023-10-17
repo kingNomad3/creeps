@@ -11,6 +11,7 @@ class Creep:
         self.pivot = 1
         self.vitesse = 15
         self.vie = 20
+        self.id_tkinter = None
         self.id = prochain_id()
         self.couleur = "red"
         self.dimensions = {
@@ -21,6 +22,7 @@ class Creep:
         }
         self.is_alive = True
         self.a_tue = False
+        self.rayon = True
 
     def mouvement_creep(self):
         pivot_actuel = self.parent.chemin.pivots[self.pivot]

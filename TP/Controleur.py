@@ -18,10 +18,17 @@ class Controleur:
         self.vue.root.after(50, self.boucler_travail)
         self.temps += 50
         if self.modele.tour_a_creer != -1 and self.modele.x and self.modele.y:
-            print("wkewoke")
             self.modele.creer_tour()
-            self.vue.afficher_tours()
         self.nouvelle_partie()
+        self.vue.afficher_tours()
+        self.vue.afficher_obus()
+        for i in self.modele.tours:
+            if i.active:
+                cible = i.chercher_cible(self.temps)
+                if cible:
+                    i.attaquer_cible()
+            else:
+                self.modele.tours.remove(i)
 
     def nouvelle_partie(self):
         if len(self.modele.creeps) == 0:

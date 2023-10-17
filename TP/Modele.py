@@ -21,7 +21,6 @@ class Modele():
     def creer_creeps(self):
         creep = Creep(self)
         self.creeps.append(creep)
-        print(len(self.creeps))
 
     def creer_tour(self):
         tour = None
@@ -44,5 +43,6 @@ class Modele():
             self.compteur += 1
         for i in self.creeps:
             i.mouvement_creep()
+            i.am_i_alive()
             if not i.is_alive:
                 self.creeps.remove(i)

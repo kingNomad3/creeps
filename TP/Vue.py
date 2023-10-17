@@ -10,6 +10,7 @@ class Vue:
         self.parent = parent
         self.modele = modele
         self.root = Tk()
+        self.obus = []
         self.init_fenetre()
 
     def init_fenetre(self):
@@ -23,7 +24,7 @@ class Vue:
         self.creer_chateau()
         self.creer_menu_vague_chrono()
         self.creer_menu_choix_tours()
-        self.creer_menu_upgrade_tour()
+        # self.creer_menu_upgrade_tour()
         self.creer_menu_nb_vies()
         self.creer_menu_argent()
 
@@ -34,7 +35,7 @@ class Vue:
 
     def afficher_creep(self):
         for i in self.modele.creeps:
-            self.frame_jeu.create_oval(i.dimensions["x1"], i.dimensions["y1"],i.dimensions["x2"], i.dimensions["y2"],
+            i.id_tkinter = self.frame_jeu.create_oval(i.dimensions["x1"], i.dimensions["y1"],i.dimensions["x2"], i.dimensions["y2"],
                                        fill="OrangeRed3", tags=("creeps",))
 
             self.frame_jeu.create_oval(i.dimensions["x1"] + 16 , i.dimensions["y1"]+16 ,i.dimensions["x2"] - 44,
@@ -172,28 +173,30 @@ class Vue:
     #
     def creer_tour_poison(self, evt):
         self.modele.tour_a_creer = 2
-    #
-    # def afficher_obus(self):
-    #     for i in self.modele.tours:
-    #         if i.obus:
-    #             if i.obus.alive:
-    #                 self.frame_jeu.delete(i.obus.id)
-    #                 obus = self.frame_jeu.create_oval(i.obus.x - 15,
-    #                                                 i.obus.y - 8,
-    #                                                 i.obus.x + 15,
-    #                                                 i.obus.y + 8,
-    #                                                 fill="grey",
-    #                                                 tags=(i.obus.id, "obus"))
-    #                 self.obus.append(obus)
-    #             else:
-    #                 self.frame_jeu.delete(i.obus.id)
-    #                 self.obus.remove(i)
-    #
-    # def effacer_obus(self, obus):
-    #     self.frame_jeu.delete(obus.id)
+
+    def afficher_obus(self):
+        for i in self.modele.tours:
+            if i.obus:
+                if i.obus.alive:
+                    self.frame_jeu.delete(i.obus.id)
+                    obus = self.frame_jeu.create_oval(i.obus.x - 15,
+                                                    i.obus.y - 8,
+                                                    i.obus.x + 15,
+                                                    i.obus.y + 8,
+                                                    fill="grey",
+                                                    tags=(i.obus.id, "obus"))
+                    i.obus.id_tkinter = obus
+                    self.obus.append(obus)
+                else:
+                    self.frame_jeu.delete(i.obus.id)
+                    self.obus.remove(i)
+
+
+
+    def effacer_obus(self, obus):
+        self.frame_jeu.delete(obus.id)
 
     def afficher_fenetre_upgrade(self):
         self.frame_jeu
         self.tour_upgrade()
-
 

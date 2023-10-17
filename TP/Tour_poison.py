@@ -8,7 +8,7 @@ class Tour_poison():
         self.y = y
         self.parent = parent
         self.fire_rate = 500
-        self.rayon = 150
+        self.rayon = 250
         self.dommage = 20
         self.temps_poison = 2000
         self.cible_courante = None
@@ -21,14 +21,17 @@ class Tour_poison():
         if not len(self.creeps_trop_loin) >= len(self.parent.creeps):
             if not self.cible_courante:
                 for i in self.parent.creeps:
-                    if i.in_range:
+                    if i.rayon:
                         distance = hp.Helper.calcDistance(self.x, self.y, i.dimensions["x1"], i.dimensions["y1"])
                         if distance <= self.rayon:
                             self.cible_courante = i
+                            print("la cibles est chercher")
                             return True
                         else:
+
+                            print("`la cibles n;est pas chercher")
                             if i.id in self.distance_avant and distance > self.distance_avant[i.id]:
-                                i.in_range = False
+                                i.rayon = False
                                 self.creeps_trop_loin.append(i)
                             else:
                                 self.distance_avant[i.id] = distance
@@ -39,6 +42,7 @@ class Tour_poison():
                     self.cible_courante = None
                     self.parent.parent.vue.effacer_obus(self.obus)
                     self.obus = None
+
         else: self.active = False
         return False
 
@@ -47,13 +51,16 @@ class Tour_poison():
             if not self.obus:
                 self.obus = Obus(self)
             else:
+
                 collision = self.obus.voyage_cible()
                 if collision:
                     self.cible_courante.vie -= self.dommage
                     self.parent.parent.vue.effacer_obus(self.obus)
                     self.obus = None
+                    print(self.cible_courante.vie)
+                    print(self.obus)
 
-        if not len(self.creeps_trop_loin) >= len(self.parent.creeps) and self.cible_courante is not None:
+        if not len(self.creeps_trop_loin) >= len(self.parent.creeps) and self.cible_courante:
             self.cible_courante = None
-
+            #print("ça marche pas")
 

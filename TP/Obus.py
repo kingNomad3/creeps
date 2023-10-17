@@ -15,24 +15,26 @@ class Obus():
         self.alive = True
         self.collision = False
         self.id = "obus_" + prochain_id()
+        self.id_tkinter = None
 
 
 
     def voyage_cible(self):
-        cible_x = self.parent.cible_courante.dimensions["x1"]
-        cible_y = self.parent.cible_courante.dimensions["y1"]
+        cible_x = self.parent.cible_courante.dimensions["x1"] + 38
+        cible_y = self.parent.cible_courante.dimensions["y1"] + 40
 
         if cible_x > self.x:
-            self.x += 15
+            self.x += 30
         if cible_x < self.x:
-            self.x -= 15
+            self.x -= 30
         if cible_y > self.y:
-            self.y += 15
+            self.y += 30
         if cible_y < self.y:
-            self.y -= 15
+            self.y -= 30
 
-        if (abs(cible_y - self.y) <= 8
-                and abs(cible_x - self.x) <= 8):
+        if (abs(cible_y - self.y) <= 20
+                and abs(cible_x - self.x) <= 20):
+            print("shoot")
             self.alive = False
             self.collision = True
 
