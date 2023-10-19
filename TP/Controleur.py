@@ -24,12 +24,10 @@ class Controleur:
         self.vue.afficher_tours()
         self.vue.afficher_obus()
         for i in self.modele.tours:
-            if i.active:
-                cible = i.chercher_cible(self.temps)
-                if cible:
-                    i.attaquer_cible()
+            if i.cible_courante:
+                i.attaquer_cible()
             else:
-                self.modele.tours.remove(i)
+                i.chercher_cible(self.temps)
 
     def nouvelle_partie(self):
         if len(self.modele.creeps) == 0:

@@ -180,9 +180,9 @@ class Vue:
             if i.obus:
                 if i.obus.alive:
                     self.frame_jeu.delete(i.obus.id)
-                    obus = self.frame_jeu.create_oval(i.obus.x - 15,
+                    obus = self.frame_jeu.create_oval(i.obus.x - 8,
                                                     i.obus.y - 8,
-                                                    i.obus.x + 15,
+                                                    i.obus.x + 8,
                                                     i.obus.y + 8,
                                                     fill="grey",
                                                     tags=(i.obus.id, "obus"))
@@ -191,11 +191,19 @@ class Vue:
                     self.frame_jeu.delete(i.obus.id)
                     self.obus.remove(i)
 
+    def deplacement_obus(self):
+        for i in self.modele.tours:
+            self.frame_jeu.move(self.obus, i.obus.dx, i.obus.dy)
+
+
     def effacer_obus(self, obus):
-        self.frame_jeu.delete(obus.id)
+        if obus.id and obus:
+            self.frame_jeu.delete(obus.id)
 
     def afficher_fenetre_upgrade(self):
         self.frame_jeu
         self.tour_upgrade()
+
+
 
 
