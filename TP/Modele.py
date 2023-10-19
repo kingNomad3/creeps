@@ -16,6 +16,7 @@ class Modele():
         self.x = None
         self.y= None
         self.tour_a_creer = -1
+        self.tour_a_upgrade = -1
 
     def creer_creeps(self):
         creep = Creep(self)
@@ -23,6 +24,7 @@ class Modele():
 
     def creer_tour(self):
         tour = None
+        self.tour_a_upgrade = 1
         if self.x and self.y:
             if self.tour_a_creer == 0:
                 tour = Tour_laser(self, self.x, self.y)
@@ -36,6 +38,9 @@ class Modele():
             self.x = None
             self.y = None
 
+    def tour_a_upgrade(self):
+        pass
+
     def travailler(self):
         if self.parent.temps % 500 == 0 and self.compteur < 20:
             self.creer_creeps()
@@ -45,5 +50,7 @@ class Modele():
             i.am_i_alive()
             if not i.is_alive:
                 self.creeps.remove(i)
+                if not i.a_tue:
+                    self.parent.argent += 5
                 if i.a_tue:
                     self.parent.vies -= 1

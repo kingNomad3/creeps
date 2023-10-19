@@ -14,6 +14,8 @@ class Vue:
         self.obus = []
 
     def init_fenetre(self):
+        self.splash_screen = Canvas(self.root, height=-1, width=-1, bg="white")
+        self.splash_screen.pack()
         self.frame_jeu = Canvas(self.root, height=960, width=1280, bg="black")
         self.frame_jeu.pack()
         self.terrain = self.frame_jeu.create_rectangle(0,0,1282,720, fill='forest green', tags="terrain_jeu") # Pixel de trop
@@ -58,12 +60,13 @@ class Vue:
 
 
     def afficher_modele(self):
-        self.frame_jeu.delete("creeps", "temps", "vagueActuelle", "vieActuelle")
+        self.frame_jeu.delete("creeps", "temps", "vagueActuelle", "vieActuelle", "ArgentActuelle")
         self.afficher_creep()
         self.frame_jeu.create_text(120, 800, text=round(self.parent.temps/1000,0), fill="black", font=('Helvetica 20 bold'), tags="temps")
         self.frame_jeu.create_text(120, 882, text=self.parent.vague, fill="black", font=('Helvetica 20 bold'), tag="vagueActuelle")
         self.frame_jeu.create_text(1060, 800, text=self.parent.vies, fill="black", font=('Helvetica 30 bold'),  tag="vieActuelle")
-
+        self.frame_jeu.create_text(1060, 930, text=self.parent.argent, fill="black", font=('Helvetica 30 bold'),
+                               tag="ArgentActuelle")
 
     def creer_chateau(self):
         self.frame_jeu.create_rectangle(1120, 520, 1240, 680, fill="snow3", outline="snow3") #Main rectangle
@@ -94,6 +97,7 @@ class Vue:
 
 
     def creer_menu_choix_tours(self, evt):
+        self.frame_jeu.delete("menu_upgrade")
         self.frame_jeu.create_rectangle(240, 760, 720, 920, fill="Yellow green", outline="white",  tags=("menu_tour",))
         self.frame_jeu.create_text(350, 780, text="Choix de tours", fill="black", font=('Helvetica 15 bold'), tags=("menu_tour" ,))
 
@@ -111,6 +115,7 @@ class Vue:
 
 
     def creer_menu_upgrade_tour(self, evt):
+        self.frame_jeu.delete("menu_tour")
         self.frame_jeu.create_rectangle(240, 760, 720, 920, fill="turquoise3", outline="white", tags=("menu_upgrade",))
         self.frame_jeu.create_text(350, 780, text="Upgrade tour", fill="black", font=('Helvetica 15 bold'), tags=("menu_upgrade",))
 
@@ -120,23 +125,48 @@ class Vue:
 
         self.frame_button_upgrade = self.frame_jeu.create_rectangle(440, 800, 520, 880, fill="turquoise2", outline="white",
                                                              tags=("button_upgrade", "menu_upgrade",))
-        self.frame_jeu.tag_bind("button_upgrade", "<Button-1>", self.creer_menu_choix_tours)
+        self.frame_jeu.tag_bind("button_upgrade", "<Button-1>", self.upgrade_tour)
         self.frame_jeu.create_text(460, 850, text="", fill="black", tags=("menu_upgrade",))
 
         self.frame_button3 = self.frame_jeu.create_rectangle(560, 800, 680, 880, fill="turquoise2", outline="white",
                                                              tags=("button3", "menu_upgrade",))
         self.frame_jeu.create_text(460, 850, text="", fill="black", tags=("menu_upgrade",))
+        self.creer_contenu_menu_upgrade_tour()
 
 
-    def creer_tour(self):
-        pass # À EFFACER
+    def creer_contenu_menu_upgrade_tour(self):
+        self.t_projectile_1 = "\nTir des balles \n lentement"
+        self.t_projectile_2 = "\nMitrailleur tir \nplus rapidement"
+        self.t_projectile_3 = "\nLance-grenade, \nplus lent mais \nplus fort"
+        self.t_laser_1 = "\n\nUn éclair qui \naffecte la cible \nquelques tours \nde suite"
+        self.t_laser_2 = "\n\nDevient un Laser \nfaible, qui suit \nun objectif tant \nqu’il est dans le \nchamp de la tour"
+        self.t_laser_3 = "\n\nLaser puissant"
+        self.t_poison_1 = "\n\nJette de l’acide \nqui agit lentement \nsur l’objet."
+        self.t_poison_2 = "\nRecharge plus \nrapide"
+        self.t_poison_3 = "\nAcide plus \nforte"
+
+        self.frame_jeu.create_text(345, 820, text=self.t_laser_1, fill="black", tags=("menu_upgrade"),
+                                   font=('Helvetica 13 bold'))
+        self.frame_jeu.create_text(625, 820, text=self.t_laser_1, fill="black", tags=("menu_upgrade"),
+                                   font=('Helvetica 13 bold'))
+
+        # self.frame_jeu.tag_bind("tours", "<Button-1>", self.creer_menu_upgrade_tour)
+        # self.upgrade_tour()
+
+    def afficher_laser(self):
+        self.frame_jeu.delete("laser")
+        for i in self.modele.tours:
+            if isinstance(i, Tour_laser):
+                self.frame_jeu.create_line(i.dimensions["x1"], i.dimensions["y1"], i.dimensions["x2"],
+                                           i.dimensions["y2"], fill="red", width=5, tags=("laser",))
 
     def creer_menu_nb_vies(self):
         self.frame_jeu.create_rectangle(960, 760, 1160, 840, fill="Yellow green", outline="white")
         self.frame_jeu.create_text(1060, 770, text="Vies", fill="black", font=('Helvetica 15 bold'), tags=("vie",))
 
     def creer_menu_argent(self):
-        self.frame_jeu.create_rectangle(960, 880, 1160, 920, fill="Yellow green", outline="white")
+        self.frame_jeu.create_rectangle(960, 880, 1160, 950, fill="Yellow green", outline="white")
+        self.frame_jeu.create_text(1060, 900, text="argent", fill="black", font=('Helvetica 15 bold'), tags=("argent",))
 
     # def creer_tour(self, evt):
     #     pass
@@ -146,15 +176,15 @@ class Vue:
         tours = self.modele.tours
         for i in tours:
             if isinstance(i, Tour_laser):
-                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="green", tags=("tours",))
+                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="green", tags=("tours", i.id,))
 
             if isinstance(i, Tour_projectile):
-                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="pink", tags=("tours",))
+                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="pink", tags=("tours", i.id,))
 
             if isinstance(i, Tour_poison):
-                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="green yellow", tags=("tours",))
+                self.frame_jeu.create_rectangle(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="green yellow", tags=("tours", i.id,))
 
-            self.frame_jeu.create_oval(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="yellow", stipple='gray50',  tags=("tours",))
+            self.frame_jeu.create_oval(i.x - 30, i.y - 30, i.x + 30, i.y + 30, fill="yellow", stipple='gray50',  tags=("tours", i.id,))
 
             self.frame_jeu.tag_bind("tours", "<Button-1>", self.creer_menu_upgrade_tour)
 
@@ -175,6 +205,14 @@ class Vue:
     #
     def creer_tour_poison(self, evt):
         self.modele.tour_a_creer = 2
+
+    def upgrade_tour(self, evt):
+        if self.parent.argent >= 50:
+            self.modele.tour_a_upgrade = 0
+            #self.tour_id = tour_id
+            self.creer_menu_choix_tours("w")
+        else:
+            self.creer_menu_choix_tours("e")
 
     def afficher_obus(self):
         for i in self.modele.tours:

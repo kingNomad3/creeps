@@ -11,6 +11,7 @@ class Creep:
         self.pivot = 1
         self.vitesse = 15
         self.vie = 20
+        self.vie_courante = self.vie
         self.id_tkinter = None
         self.id = prochain_id()
         self.couleur = "red"
@@ -22,7 +23,8 @@ class Creep:
         }
         self.is_alive = True
         self.a_tue = False
-        self.rayon = True
+        self.empoisonne = False
+
 
     def mouvement_creep(self):
         pivot_actuel = self.parent.chemin.pivots[self.pivot]
@@ -51,4 +53,6 @@ class Creep:
     def am_i_alive(self):
         if self.vie <= 0:
             self.is_alive = False
+
+
 

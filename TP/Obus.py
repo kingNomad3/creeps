@@ -35,6 +35,7 @@ class Obus():
 
         if abs(cible_y - self.y) <= 20 and abs(cible_x - self.x) <= 20:
            self.collision = True
-           print(self.id)
+
 
         return self.collision
+
