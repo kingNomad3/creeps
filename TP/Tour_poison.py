@@ -7,14 +7,15 @@ class Tour_poison():
         self.x = x
         self.y = y
         self.parent = parent
-        self.fire_rate = 500
         self.rayon = 200
         self.dommage = 5
+        self.fire_rate = 500
         self.temps_poison = 2000
         self.cible_courante = None
         self.obus = None
         self.creeps_trop_loin = []
         self.distance_avant = {}
+        self.niveau = 1
         self.active = True
 
     def chercher_cible(self, temps):

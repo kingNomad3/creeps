@@ -58,7 +58,7 @@ class Vue:
 
 
     def afficher_modele(self):
-        self.frame_jeu.delete("creeps", "temps","vagueActuelle", "vieActuelle")
+        self.frame_jeu.delete("creeps", "temps", "vagueActuelle", "vieActuelle")
         self.afficher_creep()
         self.frame_jeu.create_text(120, 800, text=round(self.parent.temps/1000,0), fill="black", font=('Helvetica 20 bold'), tags="temps")
         self.frame_jeu.create_text(120, 882, text=self.parent.vague, fill="black", font=('Helvetica 20 bold'), tag="vagueActuelle")
@@ -142,6 +142,7 @@ class Vue:
     #     pass
 
     def afficher_tours(self):
+        self.frame_jeu.delete("tours")
         tours = self.modele.tours
         for i in tours:
             if isinstance(i, Tour_laser):
